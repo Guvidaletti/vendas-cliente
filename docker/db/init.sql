@@ -1,8 +1,13 @@
+# drop database vendas;
+
+create database vendas;
+use vendas;
+
 create table cliente
 (
     id   integer primary key auto_increment,
-    nome varchar(100),
-    cpf  char(11),
+    nome varchar(100) not null,
+    cpf  char(11) not null unique
 );
 
 create table produto
@@ -27,4 +32,12 @@ create table item_pedido
     pedido_id  integer references pedido (id),
     produto_id integer references produto (id),
     quantidade integer
+);
+
+create table usuario
+(
+    id integer primary key auto_increment,
+    usuario varchar(100) unique not null ,
+    senha varchar(250) not null ,
+    admin bool
 );
