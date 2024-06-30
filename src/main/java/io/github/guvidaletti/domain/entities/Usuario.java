@@ -9,6 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @RequiredArgsConstructor
 @AllArgsConstructor
+@Builder
 // JPA
 @Entity
 @Table(name = "usuario")
@@ -20,7 +21,7 @@ public class Usuario {
 
   @NonNull
   @NotEmpty(message = "{campo.username.obrigatorio}")
-  @Column(name = "usuario")
+  @Column(name = "usuario", unique = true)
   private String usuario;
 
   @NonNull

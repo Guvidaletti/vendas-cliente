@@ -1,5 +1,7 @@
 package io.github.guvidaletti.config;
 
+import io.github.guvidaletti.security.jwt.JwtAuthFilter;
+import io.github.guvidaletti.security.jwt.TokenService;
 import io.github.guvidaletti.service.impl.UsuarioServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -8,7 +10,10 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 @EnableWebSecurity
 @Configuration
@@ -16,6 +21,15 @@ public class SecurityConfig {
 
   @Autowired
   private UsuarioServiceImpl usuarioService;
+
+  @Autowired
+  private TokenService tokenService;
+
+
+  @Bean
+  public OncePerRequestFilter jwtFilter() {
+    return new JwtAuthFilter(tokenService, usuarioService);
+  }
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -30,14 +44,17 @@ public class SecurityConfig {
                 .requestMatchers("/pedido/**").hasRole("USER")
                 .requestMatchers("/produto/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/usuario/", "/usuario").permitAll()
+                .requestMatchers(HttpMethod.POST, "/usuario/login", "/usuario/login/").permitAll()
                 .anyRequest().authenticated()
-        )
-        .httpBasic(basic -> basic.init(http));
+        ).sessionManagement(session -> session
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        ).addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
     return http.build();
   }
 }
 
 /*
+.httpBasic(basic -> basic.init(http));
 
   @Bean
   public InMemoryUserDetailsManager userDetailsService() {

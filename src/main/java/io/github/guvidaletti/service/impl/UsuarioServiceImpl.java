@@ -2,16 +2,21 @@ package io.github.guvidaletti.service.impl;
 
 import io.github.guvidaletti.domain.entities.Usuario;
 import io.github.guvidaletti.domain.repositories.UsuarioRepository;
+import io.github.guvidaletti.exception.SenhaInvalidaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UsuarioServiceImpl implements UserDetailsService {
+
+  @Autowired
+  private PasswordEncoder encoder;
 
   @Autowired
   private UsuarioRepository usuarioRepository;
@@ -31,6 +36,14 @@ public class UsuarioServiceImpl implements UserDetailsService {
         .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
   }
 
+  public UserDetails autenticar(Usuario usuario) {
+    UserDetails user = loadUserByUsername(usuario.getUsuario());
+//    TODO: Aqui é pra atualizar o usuario. if admin
+    if (encoder.matches(usuario.getSenha(), user.getPassword())) {
+      return user;
+    }
+    throw new SenhaInvalidaException("Usuário ou senha inválidos");
+  }
 }
 
 /*
