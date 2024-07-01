@@ -6,6 +6,7 @@ import io.github.guvidaletti.rest.dto.CredenciaisDTO;
 import io.github.guvidaletti.rest.dto.TokenDTO;
 import io.github.guvidaletti.security.jwt.TokenService;
 import io.github.guvidaletti.service.impl.UsuarioServiceImpl;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,14 +33,16 @@ public class UsuarioController {
 
   @PostMapping({"", "/"})
   @ResponseStatus(HttpStatus.CREATED)
+  @Operation(security = {})
   public Usuario salvar(@RequestBody @Valid Usuario usuario) {
     String senhaCriptografada = encoder.encode(usuario.getSenha());
     usuario.setSenha(senhaCriptografada);
     return usuarioService.save(usuario);
   }
 
+  @Operation(security = {})
   @PostMapping({"/login", "/login/"})
-    public TokenDTO login(@RequestBody @Valid CredenciaisDTO credenciais) {
+  public TokenDTO login(@RequestBody @Valid CredenciaisDTO credenciais) {
     try {
       Usuario usuario = Usuario.builder()
           .usuario(credenciais.getLogin())

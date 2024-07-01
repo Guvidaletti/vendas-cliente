@@ -8,6 +8,7 @@ import io.github.guvidaletti.rest.dto.InformacoesItensPedidoDTO;
 import io.github.guvidaletti.rest.dto.InformacoesPedidoDTO;
 import io.github.guvidaletti.rest.dto.PedidoDTO;
 import io.github.guvidaletti.service.PedidoService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/pedido")
 @AllArgsConstructor
+@SecurityRequirement(name = "Token")
 public class PedidoController {
 
   private PedidoService pedidoService;

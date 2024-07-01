@@ -2,6 +2,8 @@ package io.github.guvidaletti.rest.controller;
 
 import io.github.guvidaletti.domain.entities.Cliente;
 import io.github.guvidaletti.domain.repositories.ClienteRepository;
+import io.github.guvidaletti.domain.repositories.specs.ClienteSpecs;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Example;
@@ -12,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+@SecurityRequirement(name = "Token")
 @RestController
 @RequestMapping("/cliente")
 @AllArgsConstructor
@@ -62,7 +65,14 @@ public class ClienteController {
       return c;
     }).orElseThrow(() -> notFound());
   }
+
+  @GetMapping({"/busca", "/busca/"})
+  public List<Cliente> getClienteBy(@RequestParam("busca") String busca) {
+    return clienteRepository.findAll(ClienteSpecs.comNome(busca).or(ClienteSpecs.comCpf(busca))).stream().toList();
+  }
+
 }
+
 
 
 /*

@@ -4,13 +4,14 @@ import io.github.guvidaletti.domain.entities.Cliente;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.springframework.data.domain.Example;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface ClienteRepository extends CrudRepository<Cliente, Integer> {
+public interface ClienteRepository extends CrudRepository<Cliente, Integer>, JpaSpecificationExecutor<Cliente> {
 
   @Fetch(FetchMode.JOIN)
   List<Cliente> findClientesByNomeContainingIgnoreCaseOrderByNomeDesc(String nome);

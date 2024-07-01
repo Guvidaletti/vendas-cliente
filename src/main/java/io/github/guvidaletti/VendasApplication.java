@@ -1,12 +1,13 @@
 package io.github.guvidaletti;
 
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.stereotype.Controller;
 
 @SpringBootApplication
-@Controller
+@SecurityScheme(name = "Token", scheme = "bearer", type = SecuritySchemeType.HTTP)
 public class VendasApplication {
 
   public static void main(String[] args) {

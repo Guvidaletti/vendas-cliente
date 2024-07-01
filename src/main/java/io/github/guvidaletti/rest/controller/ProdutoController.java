@@ -2,6 +2,7 @@ package io.github.guvidaletti.rest.controller;
 
 import io.github.guvidaletti.domain.entities.Produto;
 import io.github.guvidaletti.domain.repositories.ProdutoRepository;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/produto")
 @AllArgsConstructor
+@SecurityRequirement(name = "Token")
 public class ProdutoController {
 
   private final ProdutoRepository produtoRepository;

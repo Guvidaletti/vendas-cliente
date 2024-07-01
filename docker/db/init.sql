@@ -38,6 +38,6 @@ create table usuario
 (
     id integer primary key auto_increment,
     usuario varchar(100) unique not null ,
-    senha varchar(250) not null ,
-    admin bool
+    senha varchar(250) not null,
+    admin bool default false
 );
